@@ -44,7 +44,10 @@ export default function ProductList() {
   };
 
   const handleDelete = (id) => {
-    setProducts((prev) => prev.filter((p) => p.id !== id));
+    const confirmDelete = window.confirm("Bạn có chắc chắn muốn xoá sản phẩm này?");
+    if (confirmDelete) {
+      setProducts((prev) => prev.filter((p) => p.id !== id));
+    }
   };
 
   return (
