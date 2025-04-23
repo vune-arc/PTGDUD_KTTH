@@ -8,6 +8,8 @@ const initialProducts = [
 
 export default function ProductList() {
   const [products, setProducts] = useState(initialProducts);
+  const [searchInput, setSearchInput] = useState("");
+  const [searchTerm, setSearchTerm] = useState("");
   const [newProduct, setNewProduct] = useState({
     name: "",
     price: "",
@@ -49,11 +51,27 @@ export default function ProductList() {
       setProducts((prev) => prev.filter((p) => p.id !== id));
     }
   };
-
+  const filteredProducts = products.filter((p) =>
+    p.name.toLowerCase().includes(searchTerm.toLowerCase())
+  );
   return (
     <div className="max-w-4xl mx-auto mt-10 p-4 bg-white shadow-md rounded-xl">
       <h1 className="text-2xl font-bold mb-6">Danh sách sản phẩm</h1>
-
+      <div className="flex gap-2 mb-4">
+        <input
+          type="text"
+          placeholder="Tìm sản phẩm theo tên..."
+          value={searchInput}
+          onChange={(e) => setSearchInput(e.target.value)}
+          className="border px-3 py-2 rounded w-full"
+        />
+        <button
+          onClick={() => setSearchTerm(searchInput)}
+          className="bg-blue-500 text-white px-4 rounded hover:bg-blue-600"
+        >
+          Tìm
+        </button>
+      </div>
       {/* Form thêm sản phẩm */}
       <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
         <input
@@ -108,7 +126,7 @@ export default function ProductList() {
           </tr>
         </thead>
         <tbody>
-          {products.map((p) => (
+          {filteredProducts.map((p) => (
             <tr key={p.id} className="border-t">
               <td className="py-2 px-4">{p.name}</td>
               <td className="py-2 px-4">{p.price.toLocaleString()} ₫</td>
@@ -124,6 +142,7 @@ export default function ProductList() {
               </td>
             </tr>
           ))}
+
           {products.length === 0 && (
             <tr>
               <td colSpan="5" className="text-center py-4 text-gray-500">
