@@ -8,15 +8,92 @@ const initialProducts = [
 
 export default function ProductList() {
   const [products, setProducts] = useState(initialProducts);
+  const [newProduct, setNewProduct] = useState({
+    name: "",
+    price: "",
+    category: "",
+    stock: "",
+  });
+
+  const handleChange = (e) => {
+    const { name, value } = e.target;
+    setNewProduct((prev) => ({
+      ...prev,
+      [name]: value,
+    }));
+  };
+
+  const handleAddProduct = () => {
+    const { name, price, category, stock } = newProduct;
+
+    if (!name || !price || !category || !stock) {
+      alert("Vui lòng nhập đầy đủ thông tin!");
+      return;
+    }
+
+    const newItem = {
+      id: Date.now(),
+      name,
+      price: parseFloat(price),
+      category,
+      stock: parseInt(stock),
+    };
+
+    setProducts((prev) => [...prev, newItem]);
+    setNewProduct({ name: "", price: "", category: "", stock: "" });
+  };
 
   const handleDelete = (id) => {
-    const filtered = products.filter((product) => product.id !== id);
-    setProducts(filtered);
+    setProducts((prev) => prev.filter((p) => p.id !== id));
   };
 
   return (
     <div className="max-w-4xl mx-auto mt-10 p-4 bg-white shadow-md rounded-xl">
       <h1 className="text-2xl font-bold mb-6">Danh sách sản phẩm</h1>
+
+      {/* Form thêm sản phẩm */}
+      <div className="grid grid-cols-1 md:grid-cols-4 gap-4 mb-6">
+        <input
+          type="text"
+          name="name"
+          placeholder="Tên sản phẩm"
+          className="border px-3 py-2 rounded"
+          value={newProduct.name}
+          onChange={handleChange}
+        />
+        <input
+          type="number"
+          name="price"
+          placeholder="Giá"
+          className="border px-3 py-2 rounded"
+          value={newProduct.price}
+          onChange={handleChange}
+        />
+        <input
+          type="text"
+          name="category"
+          placeholder="Danh mục"
+          className="border px-3 py-2 rounded"
+          value={newProduct.category}
+          onChange={handleChange}
+        />
+        <input
+          type="number"
+          name="stock"
+          placeholder="Tồn kho"
+          className="border px-3 py-2 rounded"
+          value={newProduct.stock}
+          onChange={handleChange}
+        />
+        <button
+          className="col-span-1 md:col-span-4 bg-blue-500 text-white py-2 rounded hover:bg-blue-600 transition"
+          onClick={handleAddProduct}
+        >
+          Thêm sản phẩm
+        </button>
+      </div>
+
+      {/* Bảng danh sách sản phẩm */}
       <table className="w-full table-auto border">
         <thead>
           <tr className="bg-gray-200">
