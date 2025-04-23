@@ -1,6 +1,4 @@
-// ProductList.js
 import React, { useState } from "react";
-import ProductItem from "./componets/ProductItem"; // Import ProductItem
 
 const initialProducts = [
   { id: 1, name: "Áo thun nam", price: 199000, category: "Thời trang", stock: 15 },
@@ -159,12 +157,21 @@ export default function ProductList() {
           </tr>
         </thead>
         <tbody>
-          {filteredProducts.map((product) => (
-            <ProductItem
-              key={product.id}
-              product={product}
-              handleDelete={handleDelete}
-            />
+          {filteredProducts.map((p) => (
+            <tr key={p.id} className="border-t">
+              <td className="py-2 px-4">{p.name}</td>
+              <td className="py-2 px-4">{p.price.toLocaleString()} ₫</td>
+              <td className="py-2 px-4">{p.category}</td>
+              <td className="py-2 px-4">{p.stock}</td>
+              <td className="py-2 px-4 text-center">
+                <button
+                  onClick={() => handleDelete(p.id)}
+                  className="bg-red-500 hover:bg-red-600 text-white px-3 py-1 rounded"
+                >
+                  Xoá
+                </button>
+              </td>
+            </tr>
           ))}
 
           {products.length === 0 && (
@@ -176,12 +183,10 @@ export default function ProductList() {
           )}
         </tbody>
       </table>
-
-      {/* Tổng số sản phẩm và tồn kho */}
-      <div className="flex justify-between mb-4">
-        <p className="text-lg font-semibold">Tổng sản phẩm: {totalProducts}</p>
-        <p className="text-lg font-semibold">Tổng tồn kho: {totalStock}</p>
-      </div>
+   <div className="flex justify-between mb-4">
+  <p className="text-lg font-semibold">Tổng sản phẩm: {products.length}</p>
+  <p className="text-lg font-semibold">Tổng tồn kho: {products.reduce((total, product) => total + product.stock, 0)}</p>
+</div>
     </div>
   );
 }
